@@ -1,7 +1,8 @@
 from random import randint
 
 class Character:
-    def __init__(self):
+    def __init__(self,name):
+        self.name = name
         self.maxHP = 0
         self.hp = 0
         self.str = 0
@@ -15,10 +16,10 @@ class Character:
         self.weight = 0
         self.ac = 0
         self.inventory = []
-        self.class = None
+        self.cls = None
         self.race = None
         self.bg = None
-        self._proficiencyBonus = 2
+        self.proficiencyBonus = 2
         self.proficiencies = {"acrobatics":False,"animal handling":False,"arcana":False,"athletics":False,"deception":False,"history":False,"insight":False,"intimidation":False,"investigation":False,"medicine":False,"nature":False,"perception":False,"performance":False,"persuasion":False,"religion":False,"sleight of hand":False,"stealth":False,"survival":False}
 
     def getModifier(self,stat):
@@ -75,3 +76,28 @@ class Character:
         total += mod
         print(f"   = {total}")
         return total
+
+    def rollProficiency(self, proficiency):
+        strength = ["athletics"]
+        dexterity = ["acrobatics","sleight of hand", "stealth"]
+        intelligence = ["arcana","history","investigation","nature","religion"]
+        wisdom = ["animal handling","insight","medicine","perception","survival"]
+        charisma = ["deception","intimidation","performance","persuasion"]
+        if proficiency in strength:
+            return self.rollDice(1,20,self.getModifier(self.str)+self.proficiencyBonus if self.proficiencies[proficiency] else 0)
+        elif proficiency in dexterity:
+            return self.rollDice(1,20,self.getModifier(self.dex)+self.proficiencyBonus if self.proficiencies[proficiency] else 0)
+        elif proficiency in intelligence:
+            return self.rollDice(1,20,self.getModifier(self.int)+self.proficiencyBonus if self.proficiencies[proficiency] else 0)
+        elif proficiency in wisdom:
+            return self.rollDice(1,20,self.getModifier(self.wis)+self.proficiencyBonus if self.proficiencies[proficiency] else 0)
+        elif proficiency in charisma:
+            return self.rollDice(1,20,self.getModifier(self.cha)+self.proficiencyBonus if self.proficiencies[proficiency] else 0)
+        else:
+            raise ValueError
+
+    def __repr__(self):
+        return f"{self.name}\n{self.race} {self.cls} {self.level}\n{self.bg}\n\nHP: {self.hp}/{self.maxHP}\n\nStrength: {self.str}\nDexterity: {self.dex}\nConstitution: {self.con}\nIntelligence: {self.int}\nWisdom: {self.wis}\nCharisma: {self.cha}\n\nAC: {self.ac}\nSpeed: {self.speed}ft\n\nInventory: {self.inventory}\nProficiencies: {self.proficiencies}"
+
+g = Character("Garibaldy")
+print(g)
